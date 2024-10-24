@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/manjurulhoque/book-store/backend/internal/handlers"
 	"github.com/manjurulhoque/book-store/backend/internal/models"
+	"github.com/manjurulhoque/book-store/backend/internal/repositories"
+	"github.com/manjurulhoque/book-store/backend/internal/services"
 	"github.com/manjurulhoque/book-store/backend/pkg/db"
 	"log/slog"
 )
@@ -28,14 +31,23 @@ func init() {
 }
 
 func main() {
+
+	// Initialize repositories and services
+	orderRepo := repositories.NewOrderRepository(db.DB)
+	bookRepo := repositories.NewBookRepository(db.DB)
+
+	orderService := services.NewOrderService(orderRepo)
+	bookService := services.NewBookService(bookRepo)
+
+	// Initialize handlers
+	orderHandler := handlers.NewOrderHandler(orderService)
+	bookHandler := handlers.NewBookHandler(bookService)
+
 	// This is the main entry point for the application
 	router := gin.Default()
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	router.POST("/orders", orderHandler.CreateOrder)
+	router.GET("/orders", orderHandler)
 
 	err := router.Run()
 	if err != nil {

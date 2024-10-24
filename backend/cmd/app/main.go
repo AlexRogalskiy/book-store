@@ -35,19 +35,27 @@ func main() {
 	// Initialize repositories and services
 	orderRepo := repositories.NewOrderRepository(db.DB)
 	bookRepo := repositories.NewBookRepository(db.DB)
+	userRepo := repositories.NewUserRepository(db.DB)
 
 	orderService := services.NewOrderService(orderRepo)
 	bookService := services.NewBookService(bookRepo)
+	userService := services.NewUserService(userRepo)
 
 	// Initialize handlers
 	orderHandler := handlers.NewOrderHandler(orderService)
 	bookHandler := handlers.NewBookHandler(bookService)
+	userHandler := handlers.NewUserHandler(userService)
 
 	// This is the main entry point for the application
 	router := gin.Default()
 
+	router.POST("/register", userHandler.Register)
+	router.POST("/login", userHandler.Login)
+	router.POST("/refresh", userHandler.Refresh)
+
 	router.POST("/orders", orderHandler.CreateOrder)
-	router.GET("/orders", orderHandler)
+
+	router.POST("/books", bookHandler.CreateBook)
 
 	err := router.Run()
 	if err != nil {

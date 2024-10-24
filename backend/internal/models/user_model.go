@@ -6,5 +6,5 @@ type User struct {
 	gorm.Model
 	Email    string `json:"email" gorm:"unique;not null"`
 	Name     string `json:"name" gorm:"not null"`
-	Password string `json:"-" gorm:"-"`
+	Password string `json:"-" gorm:"not null"`
 }

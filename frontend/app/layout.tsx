@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import React from "react";
 import Navbar from "@/app/components/Navbar";
+import Footer from "@/app/components/Footer";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -28,6 +29,7 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
         <main className='min-h-screen max-w-screen-2xl mx-auto px-4 py-6 font-primary'>
             {children}
         </main>
+        <Footer/>
         </body>
         </html>
     );

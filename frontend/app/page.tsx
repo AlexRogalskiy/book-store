@@ -1,5 +1,6 @@
 import Banner from "@/app/components/Banner";
 import TopSellers from "@/app/components/TopSellers";
+import Recommended from "@/app/components/Recommended";
 
 export const metadata = {
     title: "Book Store",
@@ -11,6 +12,7 @@ export default function Home() {
         <>
             <Banner/>
             <TopSellers/>
+            <Recommended/>
         </>
     );
 }

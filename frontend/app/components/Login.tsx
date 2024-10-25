@@ -4,6 +4,9 @@ import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { signIn, SignInResponse } from "next-auth/react";
+import { toast } from "react-toastify";
+import httpStatus from "@/app/lib/http-status";
 
 const Login = () => {
     const [message, setMessage] = useState("");
@@ -15,7 +18,21 @@ const Login = () => {
     } = useForm();
 
     const onSubmit = async (data) => {
-        console.log(data);
+        const result: SignInResponse | undefined = await signIn("credentials", {
+            email: data.email,
+            password: data.password,
+            redirect: false,
+        });
+
+        if (result?.status === httpStatus.UNAUTHORIZED) {
+            // If there is an error, update the state to display the error message
+            setMessage("Invalid credentials");
+        } else {
+            toast.success("Logged in successfully");
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
     }
 
     const handleGoogleSignIn = async () => {
@@ -27,7 +44,7 @@ const Login = () => {
             <div className='w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
                 <h2 className='text-xl font-semibold mb-4'>Please Login</h2>
 
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} method="POST">
                     <div className='mb-4'>
                         <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor="email">Email</label>
                         <input

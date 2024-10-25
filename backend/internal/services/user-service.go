@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/manjurulhoque/book-store/backend/internal/models"
 	"github.com/manjurulhoque/book-store/backend/internal/repositories"
 	"golang.org/x/crypto/bcrypt"
@@ -64,7 +65,7 @@ func (s *userService) LoginUser(email, password string) (string, string, error) 
 	}
 
 	// Generate Access and Refresh Tokens
-	accessToken, err := s.generateToken(user, time.Minute*15)
+	accessToken, err := s.generateToken(user, time.Hour*24)
 	if err != nil {
 		return "", "", err
 	}
@@ -79,10 +80,14 @@ func (s *userService) LoginUser(email, password string) (string, string, error) 
 
 // Generate JWT Token
 func (s *userService) generateToken(user *models.User, expiry time.Duration) (string, error) {
+	now := time.Now()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub":  user.ID,
-		"name": user.Name,
-		"exp":  time.Now().Add(expiry).Unix(),
+		"sub":   user.ID,
+		"name":  user.Name,
+		"email": user.Email,
+		"exp":   time.Now().Add(expiry).Unix(),
+		"iat":   now.Unix(),
+		"jti":   uuid.New().String(),
 	})
 
 	return token.SignedString(jwtSecret)

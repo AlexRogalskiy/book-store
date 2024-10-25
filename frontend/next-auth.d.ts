@@ -4,7 +4,8 @@ import type { Token } from 'next-auth/jwt';
 declare module 'next-auth' {
     export interface UserObject {
         id?: string;
-        user_id?: number;
+        name?: string;
+        email?: string;
     }
 
     /**
@@ -45,9 +46,11 @@ declare module 'next-auth/jwt' {
     }
 
     export interface DecodedJWT extends UserObject {
-        token_type: string;
         exp: number;
         iat: number;
         jti: string;
+        sub: string;
+        name: string;
+        email: string;
     }
 }

@@ -40,20 +40,20 @@ export const authOptions: AuthOptions = {
                 const result = await customAuthenticationFunction(credentials);
 
                 if (result) {
-                    console.log("result", result);
-                    console.log(jwtDecode(result.data.access));
                     const {
-                        id,
+                        sub,
                         email,
+                        name,
                         exp,
-                    }: DecodedJWT = jwtDecode(result.data.access);
+                    }: DecodedJWT = jwtDecode(result.access);
 
                     const user = {
-                        ...result.data,
+                        ...result,
                         exp,
                         user: {
-                            id,
+                            id: sub,
                             email,
+                            name
                         },
                     } as User;
 

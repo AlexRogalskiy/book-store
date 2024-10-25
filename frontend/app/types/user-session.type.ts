@@ -3,7 +3,8 @@ export interface UserSession {
     access: string;
     exp: number;
     user: {
-        user_id: number;
         id: number;
+        email: string;
+        name: string;
     };
 }

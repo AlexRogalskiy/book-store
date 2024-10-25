@@ -6,6 +6,7 @@ import { HiMiniBars3CenterLeft, HiOutlineHeart, HiOutlineShoppingCart } from "re
 import { IoSearchOutline } from "react-icons/io5";
 import { HiOutlineUser } from "react-icons/hi";
 import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
 
 const navs = [
     {name: "Dashboard", href: "/user-dashboard"},
@@ -15,14 +16,14 @@ const navs = [
 ]
 
 const Navbar = () => {
-
+    const { data: session, status } = useSession();
+    console.log(session?.user);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const currentUser = false;
+    const currentUser = session?.user ? session.user : null;
 
-    const handleLogOut = () => {
+    const handleLogOut = async () => {
+        await signOut();
     }
-
-    const token = '';
 
     return (
         <header className="max-w-screen-2xl mx-auto px-4 py-6">
@@ -53,6 +54,7 @@ const Navbar = () => {
                             currentUser ? <>
                                 <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                                     <Image src="/assets/avatar.png" alt=""
+                                           width={40} height={40}
                                            className={`size-7 rounded-full ${currentUser ? 'ring-2 ring-blue-500' : ''}`}/>
                                 </button>
                                 {/* show dropdowns */}
@@ -80,7 +82,7 @@ const Navbar = () => {
                                         </div>
                                     )
                                 }
-                            </> : token ?
+                            </> : currentUser ?
                                 <Link href="/dashboard" className='border-b-2 border-primary'>Dashboard</Link> : (
                                     <>
                                         <Link href="/login"> <HiOutlineUser className="size-6"/></Link>

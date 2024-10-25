@@ -56,6 +56,7 @@ func main() {
 	router.POST("/orders", orderHandler.CreateOrder)
 
 	router.POST("/books", bookHandler.CreateBook)
+	router.GET("/books", bookHandler.GetBooks)
 
 	err := router.Run()
 	if err != nil {

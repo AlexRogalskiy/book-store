@@ -14,6 +14,11 @@ func NewBookHandler(bookService *services.BookService) *BookHandler {
 	return &BookHandler{bookService: bookService}
 }
 
+func (h *BookHandler) GetBooks(c *gin.Context) {
+
+	c.JSON(http.StatusOK, gin.H{})
+}
+
 func (h *BookHandler) CreateBook(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{})

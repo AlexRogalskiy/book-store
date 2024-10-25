@@ -47,6 +47,7 @@ const Navbar = () => {
 
                 {/* right side */}
                 <div className="relative flex items-center md:space-x-3 space-x-2">
+                    <Link href="/books">Books</Link>
                     <div>
                         {
                             currentUser ? <>
@@ -81,7 +82,9 @@ const Navbar = () => {
                                 }
                             </> : token ?
                                 <Link href="/dashboard" className='border-b-2 border-primary'>Dashboard</Link> : (
-                                    <Link href="/login"> <HiOutlineUser className="size-6"/></Link>
+                                    <>
+                                        <Link href="/login"> <HiOutlineUser className="size-6"/></Link>
+                                    </>
                                 )
                         }
                     </div>

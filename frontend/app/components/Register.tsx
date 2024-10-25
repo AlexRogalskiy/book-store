@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const Register = () => {
     const [message, setMessage] = useState("");
@@ -16,7 +17,33 @@ const Register = () => {
     } = useForm();
 
     const onSubmit = async (data) => {
+        setMessage("");
         console.log(data);
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({name: data.name, email: data.email, password: data.password}),
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                setMessage(data.message || 'Something went wrong');
+            } else {
+                const data = await response.json();
+                console.log(data);
+                setMessage('');
+                toast.success("Signup was successful");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('An unexpected error occurred');
+        }
     }
 
     const handleGoogleSignIn = async () => {
@@ -28,7 +55,24 @@ const Register = () => {
             <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <h2 className="text-xl font-semibold mb-4">Please Register</h2>
 
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} method="POST">
+                    <div className="mb-4">
+                        <label
+                            className="block text-gray-700 text-sm font-bold mb-2"
+                            htmlFor="name"
+                        >
+                            Name
+                        </label>
+                        <input
+                            {...register("name", {required: true})}
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Name"
+                            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow"
+                            required
+                        />
+                    </div>
                     <div className="mb-4">
                         <label
                             className="block text-gray-700 text-sm font-bold mb-2"
@@ -43,6 +87,7 @@ const Register = () => {
                             id="email"
                             placeholder="Email Address"
                             className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow"
+                            required
                         />
                     </div>
                     <div className="mb-4">
@@ -59,6 +104,7 @@ const Register = () => {
                             id="password"
                             placeholder="Password"
                             className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow"
+                            required
                         />
                     </div>
                     {message && (

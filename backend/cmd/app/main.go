@@ -52,14 +52,17 @@ func main() {
 
 	router.Use(cors.Default())
 
-	router.POST("/register", userHandler.Register)
-	router.POST("/login", userHandler.Login)
-	router.POST("/refresh", userHandler.Refresh)
+	api := router.Group("/api")
+	{
+		api.POST("/register", userHandler.Register)
+		api.POST("/login", userHandler.Login)
+		api.POST("/token/refresh", userHandler.Refresh)
 
-	router.POST("/orders", orderHandler.CreateOrder)
+		api.POST("/orders", orderHandler.CreateOrder)
 
-	router.POST("/books", bookHandler.CreateBook)
-	router.GET("/books", bookHandler.GetBooks)
+		api.POST("/books", bookHandler.CreateBook)
+		api.GET("/books", bookHandler.GetBooks)
+	}
 
 	err := router.Run()
 	if err != nil {

@@ -6,6 +6,8 @@ import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 import ReduxProvider from "@/app/components/ReduxProvider";
 import Preloader from "@/app/components/Preloader";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -35,6 +37,7 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
                 </ReduxProvider>
             </Suspense>
         </main>
+        <ToastContainer/>
         <Footer/>
         </body>
         </html>

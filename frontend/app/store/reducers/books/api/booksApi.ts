@@ -3,7 +3,6 @@ import { Book } from "@/app/types/book.type";
 
 const baseQuery = fetchBaseQuery({
     baseUrl: `http://localhost:8080/books`,
-    credentials: 'include',
     prepareHeaders: (Headers) => {
         const token = localStorage.getItem('token');
         if (token) {

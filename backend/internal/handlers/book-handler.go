@@ -15,8 +15,13 @@ func NewBookHandler(bookService *services.BookService) *BookHandler {
 }
 
 func (h *BookHandler) GetBooks(c *gin.Context) {
+	books, err := h.bookService.GetAllBooks()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "status": false})
+		return
+	}
 
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, gin.H{"data": books, "status": true})
 }
 
 func (h *BookHandler) CreateBook(c *gin.Context) {

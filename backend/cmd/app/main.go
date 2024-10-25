@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/manjurulhoque/book-store/backend/internal/handlers"
@@ -48,6 +49,8 @@ func main() {
 
 	// This is the main entry point for the application
 	router := gin.Default()
+
+	router.Use(cors.Default())
 
 	router.POST("/register", userHandler.Register)
 	router.POST("/login", userHandler.Login)

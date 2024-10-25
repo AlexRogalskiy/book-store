@@ -5,7 +5,7 @@ const Banner = () => {
     return (
         <div className='flex flex-col md:flex-row-reverse py-16 justify-between items-center gap-12'>
             <div className='md:w-1/2 w-full flex items-center md:justify-end'>
-                <Image src="/assets/banner.png" alt="banner" width={600} height={400}/>
+                <Image src="/assets/banner.png" alt="banner" width={500} height={400}/>
             </div>
 
             <div className='md:w-1/2 w-full'>

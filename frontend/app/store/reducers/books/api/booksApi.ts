@@ -26,7 +26,12 @@ const booksApi = createApi({
             }
         }),
         getBook: builder.query<Book, number>({
-            query: (id) => id
+            query: (id) => {
+                return {
+                    url: `/${id}`,
+                    method: 'GET'
+                }
+            }
         }),
         addBook: builder.mutation<Book, Book>({
             query: (book) => ({

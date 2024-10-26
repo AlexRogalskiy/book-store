@@ -36,8 +36,8 @@ func (h *BookHandler) CreateBook(c *gin.Context) {
 	book.Description = c.PostForm("description")
 	book.Category = c.PostForm("category")
 	book.Trending = c.PostForm("trending") == "true"
-	book.OldPrice, _ = strconv.ParseFloat(c.PostForm("oldPrice"), 64)
-	book.NewPrice, _ = strconv.ParseFloat(c.PostForm("newPrice"), 64)
+	book.OldPrice, _ = strconv.ParseFloat(c.PostForm("old_price"), 64)
+	book.NewPrice, _ = strconv.ParseFloat(c.PostForm("new_price"), 64)
 
 	// Handle file upload
 	file, err := c.FormFile("coverImage")
@@ -67,4 +67,20 @@ func (h *BookHandler) CreateBook(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"status": true, "message": "Book created successfully", "book": book})
+}
+
+func (h *BookHandler) GetBookById(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseUint(idStr, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid book ID", "status": false})
+		return
+	}
+	book, err := h.bookService.GetBookById(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "status": false})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": book, "status": true})
 }

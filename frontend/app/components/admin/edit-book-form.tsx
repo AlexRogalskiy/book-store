@@ -5,18 +5,22 @@ import React, { useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useGetBookQuery } from "@/app/store/reducers/books/api/booksApi";
 
 interface BookFormData {
     title: string;
     description: string;
     category: string;
     trending: boolean;
-    coverImage: FileList;
-    oldPrice: number;
-    newPrice: number;
+    cover_image: FileList;
+    old_price: number;
+    new_price: number;
 }
 
-const BookForm = () => {
+const EditBookForm = () => {
+    const {data: book, isLoading} = useGetBookQuery(1);
+    console.log(book);
+
     const router = useRouter();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const {
@@ -32,9 +36,9 @@ const BookForm = () => {
         formData.append('description', data.description);
         formData.append('category', data.category);
         formData.append('trending', data.trending);
-        formData.append('old_price', data.oldPrice);
-        formData.append('new_price', data.newPrice);
-        formData.append('cover_image', data.coverImage[0]);
+        formData.append('old_price', data.old_price);
+        formData.append('new_price', data.new_price);
+        formData.append('cover_image', data.cover_image[0]);
 
         try {
             await axios.post(`${process.env.BACKEND_BASE_URL}/api/books`, formData, {
@@ -181,4 +185,4 @@ const BookForm = () => {
     )
 };
 
-export default BookForm;
+export default EditBookForm;

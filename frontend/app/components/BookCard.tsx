@@ -52,12 +52,12 @@ const BookCard: React.FC<BookCardProps> = ({book, canEdit}) => {
                         <span>Add to Cart</span>
                     </button>
                     {canEdit && (
-                        <button
-                            onClick={() => handleAddToCart(book)}
-                            className="btn-success px-6 mt-2 flex items-center gap-1 !text-sm text-white">
+                        <Link
+                            href={`/dashboard/manage-books/edit/${book.id}`}
+                            className="link-btn-blue mt-2 flex items-center gap-1 !text-sm inline-block">
                             <FiPenTool/>
                             <span>Edit</span>
-                        </button>
+                        </Link>
                     )}
                 </div>
             </div>

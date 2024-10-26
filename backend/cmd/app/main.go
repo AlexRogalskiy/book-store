@@ -63,6 +63,7 @@ func main() {
 
 		api.POST("/books", bookHandler.CreateBook)
 		api.GET("/books", bookHandler.GetBooks)
+		api.GET("/books/:id", bookHandler.GetBookById)
 	}
 
 	err := router.Run()

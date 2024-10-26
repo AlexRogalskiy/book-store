@@ -3,13 +3,14 @@
 import { useGetBooksQuery } from "@/app/store/reducers/books/api/booksApi";
 import BookCard from "@/app/components/BookCard";
 import React, { useEffect, useState } from "react";
+import Preloader from "@/app/components/Preloader";
 
 interface Props {
-    canEdit?: boolean;
+    canEdit: boolean;
 }
 
 const BookList: React.FC<Props> = ({canEdit}) => {
-    const {data} = useGetBooksQuery();
+    const {data, isLoading} = useGetBooksQuery();
     const [mounted, setMounted] = useState(false);
     const books = data?.data;
 
@@ -20,6 +21,10 @@ const BookList: React.FC<Props> = ({canEdit}) => {
 
     if (!mounted) {
         return null; // Avoid rendering anything during SSR
+    }
+
+    if (isLoading) {
+        return <Preloader />;
     }
 
     return (

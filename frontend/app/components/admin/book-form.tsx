@@ -1,20 +1,53 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Book } from "@/app/types/book.type";
 import React, { useState } from "react";
 import Image from "next/image";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
+interface BookFormData {
+    title: string;
+    description: string;
+    category: string;
+    trending: boolean;
+    coverImage: FileList;
+    oldPrice: number;
+    newPrice: number;
+}
 
 const BookForm = () => {
+    const router = useRouter();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const {
         register,
         handleSubmit,
         formState: {errors},
-    } = useForm<Book>();
+    } = useForm<BookFormData>();
 
-    const onSubmit = (data: Book) => {
-        console.log(data); // Process form submission
+    const onSubmit = async (data: BookFormData) => {
+        console.log(data);
+        const formData = new FormData();
+        formData.append('title', data.title);
+        formData.append('description', data.description);
+        formData.append('category', data.category);
+        formData.append('trending', data.trending);
+        formData.append('oldPrice', data.oldPrice);
+        formData.append('newPrice', data.newPrice);
+        formData.append('coverImage', data.coverImage[0]);
+
+        try {
+            await axios.post(`${process.env.BACKEND_BASE_URL}/api/books`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            alert('Book created successfully!');
+            await router.push('/admin/books');
+        } catch (error) {
+            console.error(error);
+            alert('Failed to create the book.');
+        }
     };
 
     // Handle file selection and update the image preview
@@ -56,6 +89,7 @@ const BookForm = () => {
                     id="description"
                     className={`mt-1 block w-full p-2 border ${errors.description ? 'border-red-500' : 'border-gray-300'} rounded-md`}
                     {...register('description', {required: 'Description is required'})}
+                    rows={7}
                 />
                 {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
             </div>

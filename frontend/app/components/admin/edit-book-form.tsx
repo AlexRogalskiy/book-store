@@ -1,11 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useGetBookQuery } from "@/app/store/reducers/books/api/booksApi";
+import { Book } from "@/app/types/book.type";
 
 interface BookFormData {
     title: string;
@@ -18,8 +19,11 @@ interface BookFormData {
 }
 
 const EditBookForm = () => {
-    const {data: book, isLoading} = useGetBookQuery(1);
-    console.log(book);
+    const params = useParams();
+    const {data, isLoading} = useGetBookQuery(params.id, {
+        skip: !params.id,
+    });
+    const book = data?.data as Book;
 
     const router = useRouter();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -27,10 +31,22 @@ const EditBookForm = () => {
         register,
         handleSubmit,
         formState: {errors},
+        setValue
     } = useForm<BookFormData>();
 
+    useEffect(() => {
+        if (book) {
+            setValue('title', book.title);
+            setValue('description', book.description);
+            setValue('category', book.category);
+            setValue('trending', book.trending);
+            setValue('old_price', book.old_price);
+            setValue('new_price', book.new_price);
+            setImagePreview(`${process.env.BACKEND_BASE_URL}/${book.cover_image}`);
+        }
+    }, [book, setValue]);
+
     const onSubmit = async (data: BookFormData) => {
-        console.log(data);
         const formData = new FormData();
         formData.append('title', data.title);
         formData.append('description', data.description);
@@ -38,16 +54,22 @@ const EditBookForm = () => {
         formData.append('trending', data.trending);
         formData.append('old_price', data.old_price);
         formData.append('new_price', data.new_price);
-        formData.append('cover_image', data.cover_image[0]);
+        if (data.cover_image[0]) {
+            // Append the new cover image if it's selected
+            formData.append('cover_image', data.cover_image[0]);
+        } else {
+            // Append the existing cover image if it's not changed
+            formData.append('cover_image', book.cover_image);
+        }
 
         try {
-            await axios.post(`${process.env.BACKEND_BASE_URL}/api/books`, formData, {
+            await axios.patch(`${process.env.BACKEND_BASE_URL}/api/books/${book.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            alert('Book created successfully!');
-            await router.push('/admin/books');
+            alert('Book updated successfully!');
+            await router.push('/dashboard/manage-books');
         } catch (error) {
             console.error(error);
             alert('Failed to create the book.');
@@ -69,7 +91,7 @@ const EditBookForm = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}
               className="max-w-lg mx-auto p-8 space-y-6 bg-white shadow-md rounded-lg">
-            <h2 className="text-xl font-semibold mb-4">Add New Book</h2>
+            <h2 className="text-xl font-semibold mb-4">Update Book</h2>
             {/* Title */}
             <div>
                 <label htmlFor="title" className="block text-sm font-medium text-gray-700">
@@ -127,17 +149,17 @@ const EditBookForm = () => {
 
             {/* Cover Image */}
             <div>
-                <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="cover_image" className="block text-sm font-medium text-gray-700">
                     Cover Image
                 </label>
                 <input
                     type="file"
-                    id="coverImage"
-                    className={`mt-1 block w-full p-2 border ${errors.coverImage ? 'border-red-500' : 'border-gray-300'} rounded-md`}
-                    {...register('coverImage', {required: 'Cover image is required'})}
+                    id="cover_image"
+                    className={`mt-1 block w-full p-2 border ${errors.cover_image ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                    {...register('cover_image')}
                     onChange={handleImageChange}
                 />
-                {errors.coverImage && <p className="text-red-500 text-sm mt-1">{errors.coverImage.message}</p>}
+                {errors.cover_image && <p className="text-red-500 text-sm mt-1">{errors.cover_image.message}</p>}
 
                 {/* Image Preview */}
                 {imagePreview && (
@@ -149,32 +171,32 @@ const EditBookForm = () => {
 
             {/* Old Price */}
             <div>
-                <label htmlFor="oldPrice" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="old_price" className="block text-sm font-medium text-gray-700">
                     Old Price
                 </label>
                 <input
                     type="number"
                     step="0.01"
-                    id="oldPrice"
-                    className={`mt-1 block w-full p-2 border ${errors.oldPrice ? 'border-red-500' : 'border-gray-300'} rounded-md`}
-                    {...register('oldPrice', {required: 'Old price is required'})}
+                    id="old_price"
+                    className={`mt-1 block w-full p-2 border ${errors.old_price ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                    {...register('old_price', {required: 'Old price is required'})}
                 />
-                {errors.oldPrice && <p className="text-red-500 text-sm mt-1">{errors.oldPrice.message}</p>}
+                {errors.old_price && <p className="text-red-500 text-sm mt-1">{errors.old_price.message}</p>}
             </div>
 
             {/* New Price */}
             <div>
-                <label htmlFor="newPrice" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="new_price" className="block text-sm font-medium text-gray-700">
                     New Price
                 </label>
                 <input
                     type="number"
                     step="0.01"
-                    id="newPrice"
-                    className={`mt-1 block w-full p-2 border ${errors.newPrice ? 'border-red-500' : 'border-gray-300'} rounded-md`}
-                    {...register('newPrice', {required: 'New price is required'})}
+                    id="new_price"
+                    className={`mt-1 block w-full p-2 border ${errors.new_price ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                    {...register('new_price', {required: 'New price is required'})}
                 />
-                {errors.newPrice && <p className="text-red-500 text-sm mt-1">{errors.newPrice.message}</p>}
+                {errors.new_price && <p className="text-red-500 text-sm mt-1">{errors.new_price.message}</p>}
             </div>
 
             {/* Submit Button */}

@@ -19,16 +19,17 @@ const BookCard: React.FC<BookCardProps> = ({book}) => {
         return `${process.env.BACKEND_BASE_URL}/${book.cover_image}`;
     }
     return (
-        <div className=" rounded-lg transition-shadow duration-300">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:h-72  sm:justify-center gap-4">
-                <div className="sm:h-72 sm:flex-shrink-0 border rounded-md">
+        <div className="rounded-lg transition-shadow duration-300">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:h-72 sm:justify-center gap-4">
+                <div className="sm:flex-shrink-0 border rounded-md">
                     <Link href={`/books/${book.id}`}>
                         <Image
                             src={`${getImgUrl()}`}
                             alt="book"
                             className="w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
-                            height={500}
+                            height={300}
                             width={200}
+                            priority={true}
                         />
                     </Link>
                 </div>
@@ -45,7 +46,7 @@ const BookCard: React.FC<BookCardProps> = ({book}) => {
                     </p>
                     <button
                         onClick={() => handleAddToCart(book)}
-                        className="btn-primary px-6 space-x-1 flex items-center gap-1 ">
+                        className="btn-primary px-6 space-x-1 flex items-center gap-1 !text-sm">
                         <FiShoppingCart className=""/>
                         <span>Add to Cart</span>
                     </button>

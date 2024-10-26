@@ -6,6 +6,7 @@ declare module 'next-auth' {
         id?: string;
         name?: string;
         email?: string;
+        isAdmin?: boolean;
     }
 
     /**
@@ -52,5 +53,6 @@ declare module 'next-auth/jwt' {
         sub: string;
         name: string;
         email: string;
+        isAdmin: boolean;
     }
 }

@@ -83,12 +83,13 @@ func (s *userService) LoginUser(email, password string) (string, string, error) 
 func (s *userService) generateToken(user *models.User, expiry time.Duration) (string, error) {
 	now := time.Now()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub":   user.ID,
-		"name":  user.Name,
-		"email": user.Email,
-		"exp":   time.Now().Add(expiry).Unix(),
-		"iat":   now.Unix(),
-		"jti":   uuid.New().String(),
+		"sub":     user.ID,
+		"name":    user.Name,
+		"email":   user.Email,
+		"isAdmin": user.IsAdmin,
+		"exp":     time.Now().Add(expiry).Unix(),
+		"iat":     now.Unix(),
+		"jti":     uuid.New().String(),
 	})
 
 	return token.SignedString(jwtSecret)

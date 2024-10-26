@@ -43,6 +43,7 @@ export const authOptions: AuthOptions = {
                     const {
                         sub,
                         email,
+                        isAdmin,
                         name,
                         exp,
                     }: DecodedJWT = jwtDecode(result.access);
@@ -53,6 +54,7 @@ export const authOptions: AuthOptions = {
                         user: {
                             id: sub,
                             email,
+                            isAdmin,
                             name
                         },
                     } as User;
@@ -73,16 +75,22 @@ export const authOptions: AuthOptions = {
                 token.refresh = user.refresh;
                 token.access = user.access;
                 token.exp = user.exp;
-                token.user = user.user;
+                token.user = {
+                    ...user.user,
+                    isAdmin: user.user.isAdmin,
+                }
             }
             return token;
         },
-        async session({session, token}) {
+        async session({session, token, user}) {
             session.access = token.access;
             session.exp = token.exp;
             session.refresh = token.refresh;
             session.user = token.user;
             // session.user.id = token.id;
+            if (token?.user?.isAdmin) {
+                session.user.isAdmin = token.user.isAdmin;
+            }
             return session;
         },
         async redirect({url, baseUrl}) {

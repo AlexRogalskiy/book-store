@@ -50,11 +50,12 @@ const Navbar = () => {
                     <Link href="/books">Books</Link>
                     <div>
                         {
-                            currentUser ? <>
+                            !currentUser.isAdmin ? <>
                                 <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                                     <Image src="/assets/avatar.png" alt=""
                                            width={40} height={40}
-                                           className={`size-7 rounded-full ${currentUser ? 'ring-2 ring-blue-500' : ''}`}/>
+                                           className={`size-7 rounded-full ${currentUser ? 'ring-2 ring-blue-500' : ''}`}
+                                    />
                                 </button>
                                 {/* show dropdowns */}
                                 {
@@ -81,7 +82,7 @@ const Navbar = () => {
                                         </div>
                                     )
                                 }
-                            </> : currentUser ?
+                            </> : currentUser.isAdmin ?
                                 <Link href="/dashboard" className='border-b-2 border-primary'>Dashboard</Link> : (
                                     <>
                                         <Link href="/login"> <HiOutlineUser className="size-6"/></Link>

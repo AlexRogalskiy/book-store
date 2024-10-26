@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { HiMiniBars3CenterLeft, HiOutlineHeart, HiOutlineShoppingCart } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
@@ -17,9 +17,8 @@ const navs = [
 
 const Navbar = () => {
     const { data: session, status } = useSession();
-    console.log(session?.user);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const currentUser = session?.user ? session.user : null;
+    const currentUser = useMemo(() => session?.user, [session]);
 
     const handleLogOut = async () => {
         await signOut();

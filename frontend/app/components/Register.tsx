@@ -18,7 +18,6 @@ const Register = () => {
 
     const onSubmit = async (data) => {
         setMessage("");
-        console.log(data);
         try {
             const response = await fetch('/api/register', {
                 method: 'POST',
@@ -33,7 +32,6 @@ const Register = () => {
                 setMessage(data.message || 'Something went wrong');
             } else {
                 const data = await response.json();
-                console.log(data);
                 setMessage('');
                 toast.success("Signup was successful");
                 setTimeout(() => {

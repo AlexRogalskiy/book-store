@@ -49,6 +49,7 @@ func main() {
 
 	// This is the main entry point for the application
 	router := gin.Default()
+	router.Static("/uploads", "./uploads")
 
 	router.Use(cors.Default())
 

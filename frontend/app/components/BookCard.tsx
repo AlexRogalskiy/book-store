@@ -1,47 +1,47 @@
+"use client";
+
 import React from 'react'
 import { FiShoppingCart } from 'react-icons/fi';
 import Link from "next/link";
+import { Book } from "@/app/types/book.type";
+import Image from "next/image";
 
 
 interface BookCardProps {
-    book?: any
+    book: Book
 }
 
-const BookCard: React.FC<BookCardProps> = ({book}: any) => {
-
-    const handleAddToCart = (product) => {
+const BookCard: React.FC<BookCardProps> = ({book}) => {
+    const handleAddToCart = (book: Book) => {
     }
 
-    const getImgUrl = (img) => {
-        if (img) {
-            return "/assets/books/" + img;
-        }
-        return "/assets/book-placeholder.jpg";
+    const getImgUrl = () => {
+        return `${process.env.BACKEND_BASE_URL}/${book.cover_image}`;
     }
     return (
         <div className=" rounded-lg transition-shadow duration-300">
-            <div
-                className="flex flex-col sm:flex-row sm:items-center sm:h-72  sm:justify-center gap-4"
-            >
+            <div className="flex flex-col sm:flex-row sm:items-center sm:h-72  sm:justify-center gap-4">
                 <div className="sm:h-72 sm:flex-shrink-0 border rounded-md">
-                    <Link href={`/books/${book._id}`}>
-                        <img
-                            src={`${getImgUrl(book?.coverImage)}`}
-                            alt=""
+                    <Link href={`/books/${book.id}`}>
+                        <Image
+                            src={`${getImgUrl()}`}
+                            alt="book"
                             className="w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
+                            height={500}
+                            width={200}
                         />
                     </Link>
                 </div>
 
                 <div>
-                    <Link href={`/books/${book._id}`}>
+                    <Link href={`/books/${book.id}`}>
                         <h3 className="text-xl font-semibold hover:text-blue-600 mb-3">
-                            {book?.title}
+                            {book.title}
                         </h3>
                     </Link>
-                    <p className="text-gray-600 mb-5">{book?.description.length > 80 ? `${book.description.slice(0, 80)}...` : book?.description}</p>
+                    <p className="text-gray-600 mb-5">{book.description.length > 80 ? `${book.description.slice(0, 80)}...` : book.description}</p>
                     <p className="font-medium mb-5">
-                        ${book?.newPrice} <span className="line-through font-normal ml-2">$ {book?.oldPrice}</span>
+                        ${book.new_price} <span className="line-through font-normal ml-2">$ {book.old_price}</span>
                     </p>
                     <button
                         onClick={() => handleAddToCart(book)}

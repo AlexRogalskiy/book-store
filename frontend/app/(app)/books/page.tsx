@@ -9,12 +9,7 @@ interface Props {
 }
 
 const Page: React.FC<Props> = () => {
-
-    return (
-        <div>
-            <BookList/>
-        </div>
-    )
+    return <BookList/>
 };
 
 export default Page;

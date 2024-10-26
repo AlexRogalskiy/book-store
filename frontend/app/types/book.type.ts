@@ -4,8 +4,8 @@ export type Book = {
     description: string;
     category: string;
     trending: boolean;
-    coverImage: string;
-    oldPrice: number;
-    newPrice: number;
+    cover_image: string;
+    old_price: number;
+    new_price: number;
 }
 

@@ -22,9 +22,6 @@ const booksApi = createApi({
                 return {
                     url: '',
                     method: 'GET',
-                    params: {
-                        page: args?.page || 1,
-                    }
                 }
             }
         }),

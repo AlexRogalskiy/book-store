@@ -2,9 +2,13 @@
 
 import { useGetBooksQuery } from "@/app/store/reducers/books/api/booksApi";
 import BookCard from "@/app/components/BookCard";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const BookList = () => {
+interface Props {
+    canEdit?: boolean;
+}
+
+const BookList: React.FC<Props> = ({canEdit}) => {
     const {data} = useGetBooksQuery();
     const [mounted, setMounted] = useState(false);
     const books = data?.data;
@@ -23,7 +27,7 @@ const BookList = () => {
             <h1 className='text-2xl font-bold mb-4'>All Books</h1>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 gap-y-12'>
                 {books && books.map(book => (
-                    <BookCard key={book.id} book={book}/>
+                    <BookCard key={book.id} book={book} canEdit={canEdit}/>
                 ))}
             </div>
         </div>

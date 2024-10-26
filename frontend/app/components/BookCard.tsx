@@ -1,17 +1,18 @@
 "use client";
 
 import React from 'react'
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiPenTool, FiShoppingCart } from 'react-icons/fi';
 import Link from "next/link";
 import { Book } from "@/app/types/book.type";
 import Image from "next/image";
 
 
 interface BookCardProps {
-    book: Book
+    book: Book;
+    canEdit: boolean;
 }
 
-const BookCard: React.FC<BookCardProps> = ({book}) => {
+const BookCard: React.FC<BookCardProps> = ({book, canEdit}) => {
     const handleAddToCart = (book: Book) => {
     }
 
@@ -47,9 +48,17 @@ const BookCard: React.FC<BookCardProps> = ({book}) => {
                     <button
                         onClick={() => handleAddToCart(book)}
                         className="btn-primary px-6 space-x-1 flex items-center gap-1 !text-sm">
-                        <FiShoppingCart className=""/>
+                        <FiShoppingCart/>
                         <span>Add to Cart</span>
                     </button>
+                    {canEdit && (
+                        <button
+                            onClick={() => handleAddToCart(book)}
+                            className="btn-success px-6 mt-2 flex items-center gap-1 !text-sm text-white">
+                            <FiPenTool/>
+                            <span>Edit</span>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

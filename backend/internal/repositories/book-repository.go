@@ -3,6 +3,7 @@ package repositories
 import (
 	"github.com/manjurulhoque/book-store/backend/internal/models"
 	"gorm.io/gorm"
+	"log/slog"
 )
 
 type BookRepository interface {
@@ -11,6 +12,7 @@ type BookRepository interface {
 	GetAllBooks() ([]models.Book, error)
 	UpdateBook(book *models.Book) error
 	DeleteBook(id uint) error
+	GetHomeBooks() ([]models.Book, []models.Book, error)
 }
 
 type bookRepository struct {
@@ -43,4 +45,27 @@ func (r *bookRepository) UpdateBook(book *models.Book) error {
 
 func (r *bookRepository) DeleteBook(id uint) error {
 	return r.db.Delete(&models.Book{}, id).Error
+}
+
+func (r *bookRepository) GetHomeBooks() ([]models.Book, []models.Book, error) {
+	var topSellerBooks []models.Book
+	var recommendedBooks []models.Book
+	err := r.db.Where("trending = ?", true).Find(&topSellerBooks).Error
+	if err != nil {
+		slog.Error("Error getting top seller books", "error", err.Error())
+	}
+	if len(topSellerBooks) > 0 {
+		// Get recommended books except top seller books
+		ids := make([]uint, len(topSellerBooks))
+		for i, book := range topSellerBooks {
+			ids[i] = book.ID
+		}
+		err = r.db.Where("trending = ? AND id NOT IN (?)", false, ids).Find(&recommendedBooks).Error
+		return topSellerBooks, recommendedBooks, err
+	}
+	err = r.db.Where("trending = ?", false).Find(&recommendedBooks).Error
+	if err != nil {
+		slog.Error("Error getting recommended books", "error", err.Error())
+	}
+	return topSellerBooks, recommendedBooks, err
 }

@@ -21,6 +21,19 @@ func NewBookHandler(bookService *services.BookService) *BookHandler {
 	return &BookHandler{bookService: bookService}
 }
 
+func (h *BookHandler) HomeBooks(c *gin.Context) {
+	topSellerBooks, recommendedBooks, err := h.bookService.GetHomeBooks()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "status": false})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": gin.H{
+		"top_seller_books":  topSellerBooks,
+		"recommended_books": recommendedBooks,
+	}, "status": true})
+}
+
 func (h *BookHandler) GetBooks(c *gin.Context) {
 	books, err := h.bookService.GetAllBooks()
 	if err != nil {

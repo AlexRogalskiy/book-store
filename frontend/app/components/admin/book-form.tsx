@@ -43,7 +43,7 @@ const BookForm = () => {
                 },
             });
             alert('Book created successfully!');
-            await router.push('/admin/books');
+            await router.push('/dashboard/manage-books');
         } catch (error) {
             console.error(error);
             alert('Failed to create the book.');

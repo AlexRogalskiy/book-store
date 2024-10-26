@@ -32,3 +32,7 @@ func (s *BookService) UpdateBook(book *models.Book) error {
 func (s *BookService) DeleteBook(id uint) error {
 	return s.bookRepo.DeleteBook(id)
 }
+
+func (s *BookService) GetHomeBooks() ([]models.Book, []models.Book, error) {
+	return s.bookRepo.GetHomeBooks()
+}

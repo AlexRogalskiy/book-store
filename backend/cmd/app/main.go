@@ -61,6 +61,7 @@ func main() {
 
 		api.POST("/orders", orderHandler.CreateOrder)
 
+		api.GET("/home-books", bookHandler.HomeBooks)
 		api.POST("/books", bookHandler.CreateBook)
 		api.GET("/books", bookHandler.GetBooks)
 		api.GET("/books/:id", bookHandler.GetBookById)

@@ -10,37 +10,19 @@ import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { useState } from "react";
+import React, { useState } from "react";
 import BookCard from "@/app/components/BookCard";
+import { Book } from "@/app/types/book.type";
 
 const categories = ["Choose a genre", "Business", "Fiction", "Horror", "Adventure"]
 
-const TopSellers = () => {
+interface Props {
+    books: Book[];
+}
+
+const TopSellers: React.FC<Props> = ({books}) => {
 
     const [selectedCategory, setSelectedCategory] = useState("Choose a genre");
-
-    const books = [
-        {
-            "_id": 1,
-            "title": "Top 10 Fiction Books This Year",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-        {
-            "_id": 1,
-            "title": "Mastering SEO in 2024",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-    ];
 
     const filteredBooks = selectedCategory === "Choose a genre" ? books : books.filter(book => book.category === selectedCategory.toLowerCase())
 
@@ -90,7 +72,7 @@ const TopSellers = () => {
                 {
                     filteredBooks.length > 0 && filteredBooks.map((book, index) => (
                         <SwiperSlide key={index}>
-                            <BookCard book={book}/>
+                            <BookCard book={book} canEdit={false}/>
                         </SwiperSlide>
                     ))
                 }

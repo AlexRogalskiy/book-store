@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
+import "../globals.css";
 import React, { Suspense } from "react";
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
@@ -11,17 +10,6 @@ import { ToastContainer } from "react-toastify";
 import { NextAuthProvider } from "@/app/components/NextAuthProvider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/authOptions";
-
-const geistSans = localFont({
-    src: "./fonts/GeistVF.woff",
-    variable: "--font-geist-sans",
-    weight: "100 900",
-});
-const geistMono = localFont({
-    src: "./fonts/GeistMonoVF.woff",
-    variable: "--font-geist-mono",
-    weight: "100 900",
-});
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -34,7 +22,7 @@ export default async function RootLayout({children,}: Readonly<{ children: React
     return (
         <NextAuthProvider session={session}>
             <html lang="en">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <body>
             <Navbar/>
             <main className='min-h-screen max-w-screen-2xl mx-auto px-4 py-6 font-primary'>
                 <Suspense fallback={<Preloader/>}>

@@ -50,7 +50,7 @@ const Navbar = () => {
                     <Link href="/books">Books</Link>
                     <div>
                         {
-                            !currentUser.isAdmin ? <>
+                            currentUser && !currentUser?.isAdmin ? <>
                                 <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                                     <Image src="/assets/avatar.png" alt=""
                                            width={40} height={40}
@@ -82,7 +82,7 @@ const Navbar = () => {
                                         </div>
                                     )
                                 }
-                            </> : currentUser.isAdmin ?
+                            </> : currentUser && currentUser?.isAdmin ?
                                 <Link href="/dashboard" className='border-b-2 border-primary'>Dashboard</Link> : (
                                     <>
                                         <Link href="/login"> <HiOutlineUser className="size-6"/></Link>

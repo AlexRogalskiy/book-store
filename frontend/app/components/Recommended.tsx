@@ -12,100 +12,13 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import BookCard from "@/app/components/BookCard";
+import { Book } from "@/app/types/book.type";
 
-const Recommended: React.FC<any> = () => {
-    const books = [
-        {
-            "_id": 1,
-            "title": "Top 10 Fiction Books This Year",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-        {
-            "_id": 1,
-            "title": "Mastering SEO in 2024",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-        {
-            "_id": 1,
-            "title": "Mastering SEO in 2024",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-        {
-            "_id": 1,
-            "title": "Mastering SEO in 2024",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-        {
-            "_id": 1,
-            "title": "Mastering SEO in 2024",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-        {
-            "_id": 1,
-            "title": "Mastering SEO in 2024",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-        {
-            "_id": 1,
-            "title": "Mastering SEO in 2024",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-        {
-            "_id": 1,
-            "title": "Mastering SEO in 2024",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-        {
-            "_id": 10,
-            "title": "Mastering SEO in 2024",
-            "description": "Learn the best strategies to grow your online store in today's competitive market.",
-            "category": "business",
-            "trending": true,
-            "coverImage": "book-1.png",
-            "oldPrice": 29.99,
-            "newPrice": 19.99
-        },
-    ];
+interface Props {
+    books: Book[];
+}
+
+const Recommended: React.FC<Props> = ({books}) => {
     return (
         <div className="py-16">
             <h2 className="text-3xl font-semibold mb-6">Recommended for you </h2>
@@ -137,9 +50,9 @@ const Recommended: React.FC<any> = () => {
             >
                 {
                     books.length > 0 &&
-                    books.slice(8, 18).map((book, index) => (
+                    books.map((book, index) => (
                         <SwiperSlide key={index}>
-                            <BookCard book={book}/>
+                            <BookCard book={book} canEdit={false}/>
                         </SwiperSlide>
                     ))
                 }

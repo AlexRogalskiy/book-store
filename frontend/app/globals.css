@@ -25,9 +25,10 @@
 
 .swiper-slide {
     background: #fff;
-    display: flex;
+    display: inherit !important;
     justify-content: center;
     align-items: center;
+    height: 400px !important;
 }
 
 .swiper-slide img {

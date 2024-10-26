@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Book } from "@/app/types/book.type";
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: `http://localhost:8080/books`,
+    baseUrl: `http://localhost:8080/api/books`,
     prepareHeaders: (Headers) => {
         const token = localStorage.getItem('token');
         if (token) {

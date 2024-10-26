@@ -5,7 +5,6 @@ import { useGetBooksQuery } from "@/app/store/reducers/books/api/booksApi";
 const BookList = () => {
     const {data} = useGetBooksQuery();
     console.log(data);
-    const books = data?.data;
 
     return (
         <ul>

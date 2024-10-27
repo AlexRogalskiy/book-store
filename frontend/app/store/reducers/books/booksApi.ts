@@ -1,20 +1,10 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { Book } from "@/app/types/book.type";
-
-const baseQuery = fetchBaseQuery({
-    baseUrl: `http://localhost:8080/api/books`,
-    prepareHeaders: (Headers) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            Headers.set('Authorization', `Bearer ${token}`);
-        }
-        return Headers;
-    }
-});
+import DynamicBaseQuery from "@/app/store/dynamic-base-query";
 
 const booksApi = createApi({
     reducerPath: 'booksApi',
-    baseQuery,
+    baseQuery: DynamicBaseQuery,
     tagTypes: ['Book'],
     endpoints: (builder) => ({
         getBooks: builder.query<Book[], void>({

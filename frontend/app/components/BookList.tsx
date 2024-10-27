@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetBooksQuery } from "@/app/store/reducers/books/api/booksApi";
+import { useGetBooksQuery } from "@/app/store/reducers/books/booksApi";
 import BookCard from "@/app/components/BookCard";
 import React, { useEffect, useState } from "react";
 import Preloader from "@/app/components/Preloader";

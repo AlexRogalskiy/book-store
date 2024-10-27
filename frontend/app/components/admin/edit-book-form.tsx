@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { useGetBookQuery } from "@/app/store/reducers/books/api/booksApi";
+import { useGetBookQuery } from "@/app/store/reducers/books/booksApi";
 import { Book } from "@/app/types/book.type";
 
 interface BookFormData {

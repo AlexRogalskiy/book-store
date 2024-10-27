@@ -36,6 +36,18 @@ const Checkout = () => {
     }
 
     const onSubmit = async (data) => {
+        if (cartItems.length === 0) {
+            Swal.fire({
+                title: "Cart is empty",
+                text: "Please add some items to the cart before placing an order",
+                icon: "warning",
+                showCancelButton: false,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Okay"
+            });
+            return;
+        }
         const newOrder = {
             name: data.name,
             email: currentUser?.email,

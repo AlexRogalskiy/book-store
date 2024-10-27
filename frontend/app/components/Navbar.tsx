@@ -7,6 +7,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import { HiOutlineUser } from "react-icons/hi";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
+import { useSelector } from "react-redux";
 
 const navs = [
     {name: "Dashboard", href: "/user-dashboard"},
@@ -16,9 +17,10 @@ const navs = [
 ]
 
 const Navbar = () => {
-    const { data: session, status } = useSession();
+    const {data: session, status} = useSession();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const currentUser = useMemo(() => session?.user, [session]);
+    const cartItems = useSelector(state => state.cart.cartItems);
 
     const handleLogOut = async () => {
         await signOut();
@@ -97,7 +99,11 @@ const Navbar = () => {
 
                     <Link href="/cart" className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-sm">
                         <HiOutlineShoppingCart className=''/>
-                        <span className="text-sm font-semibold sm:ml-1">0</span>
+                        {
+                            cartItems.length > 0 ?
+                                <span className="text-sm font-semibold sm:ml-1">{cartItems.length}</span> :
+                                <span className="text-sm font-semibold sm:ml-1">0</span>
+                        }
                     </Link>
                 </div>
             </nav>

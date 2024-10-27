@@ -1,10 +1,12 @@
 "use client";
 
-import React from 'react'
+import React from 'react';
 import { FiPenTool, FiShoppingCart } from 'react-icons/fi';
 import Link from "next/link";
 import { Book } from "@/app/types/book.type";
 import Image from "next/image";
+import { useDispatch } from'react-redux'
+import { addToCart } from "@/app/store/reducers/cart/cartSlice";
 
 
 interface BookCardProps {
@@ -13,7 +15,10 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({book, canEdit}) => {
+    const dispatch =  useDispatch();
+
     const handleAddToCart = (book: Book) => {
+        dispatch(addToCart(book))
     }
 
     const getImgUrl = () => {

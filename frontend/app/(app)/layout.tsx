@@ -23,14 +23,15 @@ export default async function RootLayout({children,}: Readonly<{ children: React
         <NextAuthProvider session={session}>
             <html lang="en">
             <body>
-            <Navbar/>
-            <main className='min-h-screen max-w-screen-2xl mx-auto px-4 py-6 font-primary'>
-                <Suspense fallback={<Preloader/>}>
-                    <ReduxProvider>
+            <ReduxProvider>
+                <Navbar/>
+                <main className='min-h-screen max-w-screen-2xl mx-auto px-4 py-6 font-primary'>
+                    <Suspense fallback={<Preloader/>}>
+
                         {children}
-                    </ReduxProvider>
-                </Suspense>
-            </main>
+                    </Suspense>
+                </main>
+            </ReduxProvider>
             <ToastContainer/>
             <Footer/>
             </body>

@@ -24,7 +24,7 @@ const ordersApi = createApi({
         }),
         addOrder: builder.mutation<void, void>({
             query: (order) => ({
-                url: 'orders/',
+                url: '/orders',
                 method: 'POST',
                 body: order
             })

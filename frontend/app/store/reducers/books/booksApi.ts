@@ -10,7 +10,7 @@ const booksApi = createApi({
         getBooks: builder.query<Book[], void>({
             query: (args) => {
                 return {
-                    url: '',
+                    url: '/books',
                     method: 'GET',
                 }
             }

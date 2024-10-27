@@ -23,7 +23,7 @@ const Checkout = () => {
     } = useForm();
 
     const [addOrder, {isLoading, error}] = useAddOrderMutation();
-    const navigate = useRouter();
+    const router = useRouter();
     const [isChecked, setIsChecked] = useState(false);
 
     // Ensure the component is only rendered after it's mounted on the client
@@ -73,7 +73,7 @@ const Checkout = () => {
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, It's Okay!"
             });
-            navigate("/orders")
+            router.push("/orders");
         } catch (error) {
             console.error("Error place an order", error);
             alert("Failed to place an order");

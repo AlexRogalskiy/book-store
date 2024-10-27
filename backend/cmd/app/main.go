@@ -11,6 +11,7 @@ import (
 	"github.com/manjurulhoque/book-store/backend/internal/services"
 	"github.com/manjurulhoque/book-store/backend/pkg/db"
 	"log/slog"
+	"time"
 )
 
 func init() {
@@ -51,7 +52,15 @@ func main() {
 	router := gin.Default()
 	router.Static("/uploads", "./uploads")
 
-	router.Use(cors.Default())
+	// Updated CORS configuration
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	api := router.Group("/api")
 	{

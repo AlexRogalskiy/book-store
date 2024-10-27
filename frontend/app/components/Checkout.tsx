@@ -13,7 +13,7 @@ const Checkout = () => {
     const [mounted, setMounted] = useState(false);
     const {data: session, status} = useSession();
     const cartItems = useSelector(state => state.cart.cartItems);
-    const totalPrice = cartItems.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2);
+    const totalPrice = cartItems.reduce((acc, item) => acc + item.new_price, 0).toFixed(2);
     const currentUser = useMemo(() => session?.user, [session]);
     const {
         register,
@@ -58,8 +58,8 @@ const Checkout = () => {
                 zipcode: data.zipcode
             },
             phone: data.phone,
-            bookIds: cartItems.map(item => item.id),
-            totalPrice: totalPrice,
+            book_ids: cartItems.map(item => item.id),
+            total_price: parseFloat(totalPrice),
         }
 
         try {
@@ -73,7 +73,7 @@ const Checkout = () => {
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, It's Okay!"
             });
-            router.push("/orders");
+            // router.push("/orders");
         } catch (error) {
             console.error("Error place an order", error);
             alert("Failed to place an order");

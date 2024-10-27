@@ -41,9 +41,9 @@ export const authOptions: AuthOptions = {
 
                 if (result) {
                     const {
-                        sub,
+                        user_id,
                         email,
-                        isAdmin,
+                        is_admin,
                         name,
                         exp,
                     }: DecodedJWT = jwtDecode(result.access);
@@ -52,9 +52,9 @@ export const authOptions: AuthOptions = {
                         ...result,
                         exp,
                         user: {
-                            id: sub,
+                            id: user_id,
                             email,
-                            isAdmin,
+                            is_admin,
                             name
                         },
                     } as User;
@@ -77,7 +77,7 @@ export const authOptions: AuthOptions = {
                 token.exp = user.exp;
                 token.user = {
                     ...user.user,
-                    isAdmin: user.user.isAdmin,
+                    is_admin: user.user.is_admin,
                 }
             }
             return token;
@@ -88,8 +88,8 @@ export const authOptions: AuthOptions = {
             session.refresh = token.refresh;
             session.user = token.user;
             // session.user.id = token.id;
-            if (token?.user?.isAdmin) {
-                session.user.isAdmin = token.user.isAdmin;
+            if (token?.user?.is_admin) {
+                session.user.is_admin = token.user.is_admin;
             }
             return session;
         },
@@ -105,6 +105,6 @@ export const authOptions: AuthOptions = {
     debug: true,
     session: {
         strategy: "jwt",
-        maxAge: 7 * 24 * 60 * 60, // 7 Days
+        maxAge: 1 * 24 * 60 * 60, // 7 Days
     },
 };

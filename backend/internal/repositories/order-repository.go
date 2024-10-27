@@ -6,11 +6,12 @@ import (
 )
 
 type OrderRepository interface {
-	CreateOrder(order *models.Order) error
+	CreateOrder(order *models.Order) (uint, error)
 	GetOrderById(id uint) (*models.Order, error)
 	GetAllOrders() ([]models.Order, error)
 	UpdateOrder(order *models.Order) error
 	DeleteOrder(id uint) error
+	CreateOrderBook(uint, uint) error
 }
 
 type orderRepository struct {
@@ -21,8 +22,11 @@ func NewOrderRepository(db *gorm.DB) OrderRepository {
 	return &orderRepository{db}
 }
 
-func (r *orderRepository) CreateOrder(order *models.Order) error {
-	return r.db.Create(order).Error
+func (r *orderRepository) CreateOrder(order *models.Order) (uint, error) {
+	if err := r.db.Create(order).Error; err != nil {
+		return 0, err
+	}
+	return order.ID, nil
 }
 
 func (r *orderRepository) GetOrderById(id uint) (*models.Order, error) {
@@ -43,4 +47,9 @@ func (r *orderRepository) UpdateOrder(order *models.Order) error {
 
 func (r *orderRepository) DeleteOrder(id uint) error {
 	return r.db.Delete(&models.Order{}, id).Error
+}
+
+func (r *orderRepository) CreateOrderBook(orderId uint, bookId uint) error {
+	orderBook := models.OrderBook{OrderID: orderId, BookID: bookId}
+	return r.db.Create(&orderBook).Error
 }

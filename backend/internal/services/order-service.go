@@ -13,7 +13,7 @@ func NewOrderService(repo repositories.OrderRepository) *OrderService {
 	return &OrderService{orderRepo: repo}
 }
 
-func (s *OrderService) CreateOrder(order *models.Order) error {
+func (s *OrderService) CreateOrder(order *models.Order) (uint, error) {
 	return s.orderRepo.CreateOrder(order)
 }
 
@@ -31,4 +31,8 @@ func (s *OrderService) UpdateOrder(order *models.Order) error {
 
 func (s *OrderService) DeleteOrder(id uint) error {
 	return s.orderRepo.DeleteOrder(id)
+}
+
+func (s *OrderService) CreateOrderBook(orderId uint, bookId uint) error {
+	return s.orderRepo.CreateOrderBook(orderId, bookId)
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/manjurulhoque/book-store/backend/internal/handlers"
+	"github.com/manjurulhoque/book-store/backend/internal/middlewares"
 	"github.com/manjurulhoque/book-store/backend/internal/models"
 	"github.com/manjurulhoque/book-store/backend/internal/repositories"
 	"github.com/manjurulhoque/book-store/backend/internal/services"
@@ -68,7 +69,7 @@ func main() {
 		api.POST("/login", userHandler.Login)
 		api.POST("/token/refresh", userHandler.Refresh)
 
-		api.POST("/orders", orderHandler.CreateOrder)
+		api.POST("/orders", middlewares.AuthMiddleware(), orderHandler.CreateOrder)
 
 		api.GET("/home-books", bookHandler.HomeBooks)
 		api.POST("/books", bookHandler.CreateBook)

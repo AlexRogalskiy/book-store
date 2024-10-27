@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/manjurulhoque/book-store/backend/internal/models"
@@ -14,9 +15,18 @@ type UserService interface {
 	RegisterUser(username, email, password string) error
 	LoginUser(email, password string) (string, string, error) // Returns access and refresh tokens
 	RefreshToken(refreshToken string) (string, error)         // Returns new access token
+	VerifyToken(token string) (*JWTCustomClaims, error)
 }
 
 var jwtSecret = []byte("AB12")
+
+type JWTCustomClaims struct {
+	jwt.RegisteredClaims
+	IsAdmin bool   `json:"is_admin"`
+	Name    string `json:"name"`
+	Email   string `json:"email"`
+	UserId  uint   `json:"user_id"`
+}
 
 type userService struct {
 	userRepo repositories.UserRepository
@@ -82,15 +92,30 @@ func (s *userService) LoginUser(email, password string) (string, string, error) 
 // Generate JWT Token
 func (s *userService) generateToken(user *models.User, expiry time.Duration) (string, error) {
 	now := time.Now()
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub":     user.ID,
-		"name":    user.Name,
-		"email":   user.Email,
-		"isAdmin": user.IsAdmin,
-		"exp":     time.Now().Add(expiry).Unix(),
-		"iat":     now.Unix(),
-		"jti":     uuid.New().String(),
-	})
+	//token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+	//	"sub":     user.ID,
+	//	"name":    user.Name,
+	//	"email":   user.Email,
+	//	"isAdmin": user.IsAdmin,
+	//	"exp":     time.Now().Add(expiry).Unix(),
+	//	"iat":     now.Unix(),
+	//	"jti":     uuid.New().String(),
+	//})
+
+	claims := JWTCustomClaims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject:   fmt.Sprintf("%d", user.ID),
+			ExpiresAt: jwt.NewNumericDate(now.Add(expiry)),
+			IssuedAt:  jwt.NewNumericDate(now),
+			ID:        uuid.New().String(),
+		},
+		IsAdmin: user.IsAdmin,
+		Name:    user.Name,
+		Email:   user.Email,
+		UserId:  user.ID,
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	return token.SignedString(jwtSecret)
 }
@@ -121,4 +146,23 @@ func (s *userService) RefreshToken(refreshToken string) (string, error) {
 	}
 
 	return s.generateToken(user, time.Minute*15)
+}
+
+// VerifyToken Verify token
+func (s *userService) VerifyToken(tokenString string) (*JWTCustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &JWTCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtSecret, nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	claims, ok := token.Claims.(*JWTCustomClaims)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	if !token.Valid {
+		return nil, errors.New("unauthorized")
+	}
+	return claims, nil
 }

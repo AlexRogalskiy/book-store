@@ -73,7 +73,7 @@ const Checkout = () => {
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, It's Okay!"
             });
-            // router.push("/orders");
+            router.push("/orders");
         } catch (error) {
             console.error("Error place an order", error);
             alert("Failed to place an order");

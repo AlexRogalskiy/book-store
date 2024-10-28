@@ -6,6 +6,7 @@ This is a full-stack book store application built with Go for the backend and Ne
 
 - User authentication and authorization
 - Admin dashboard for managing books and orders
+- Goroutine practice
 - JWT token generation with custom claims
 - CRUD operations for books and orders
 - Middleware for request validation and logging

@@ -69,6 +69,7 @@ func main() {
 		api.POST("/login", userHandler.Login)
 		api.POST("/token/refresh", userHandler.Refresh)
 
+		api.GET("/user-orders", middlewares.AuthMiddleware(), orderHandler.GetOrdersForUser)
 		api.POST("/orders", middlewares.AuthMiddleware(), orderHandler.CreateOrder)
 
 		api.GET("/home-books", bookHandler.HomeBooks)

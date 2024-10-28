@@ -18,6 +18,21 @@ func NewOrderHandler(orderService *services.OrderService) *OrderHandler {
 	return &OrderHandler{orderService: orderService}
 }
 
+func (h *OrderHandler) GetOrdersForUser(c *gin.Context) {
+	if userId, exists := c.Get("userId"); !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	} else {
+		orders, err := h.orderService.GetOrdersForUser(userId.(uint))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, orders)
+	}
+}
+
 func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	var order models.Order
 	var orderInput struct {

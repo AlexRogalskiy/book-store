@@ -36,3 +36,7 @@ func (s *OrderService) DeleteOrder(id uint) error {
 func (s *OrderService) CreateOrderBook(orderId uint, bookId uint) error {
 	return s.orderRepo.CreateOrderBook(orderId, bookId)
 }
+
+func (s *OrderService) GetOrdersForUser(userId uint) ([]models.Order, error) {
+	return s.orderRepo.GetOrdersForUser(userId)
+}

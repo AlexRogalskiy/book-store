@@ -6,10 +6,10 @@ const ordersApi = createApi({
     baseQuery: DynamicBaseQuery,
     tagTypes: ['order'],
     endpoints: (builder) => ({
-        getOrders: builder.query<void, void>({
+        getUserOrders: builder.query<void, void>({
             query: () => {
                 return {
-                    url: 'orders/',
+                    url: '/user-orders',
                     method: 'GET',
                 }
             }
@@ -33,7 +33,7 @@ const ordersApi = createApi({
 });
 
 export const {
-    useGetOrdersQuery,
+    useGetUserOrdersQuery,
     useGetOrderQuery,
     useAddOrderMutation,
 } = ordersApi;

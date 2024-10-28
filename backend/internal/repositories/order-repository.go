@@ -12,6 +12,7 @@ type OrderRepository interface {
 	UpdateOrder(order *models.Order) error
 	DeleteOrder(id uint) error
 	CreateOrderBook(uint, uint) error
+	GetOrdersForUser(uint) ([]models.Order, error)
 }
 
 type orderRepository struct {
@@ -52,4 +53,10 @@ func (r *orderRepository) DeleteOrder(id uint) error {
 func (r *orderRepository) CreateOrderBook(orderId uint, bookId uint) error {
 	orderBook := models.OrderBook{OrderID: orderId, BookID: bookId}
 	return r.db.Create(&orderBook).Error
+}
+
+func (r *orderRepository) GetOrdersForUser(userId uint) ([]models.Order, error) {
+	var orders []models.Order
+	err := r.db.Where("user_id = ?", userId).Preload("Books").Find(&orders).Error
+	return orders, err
 }

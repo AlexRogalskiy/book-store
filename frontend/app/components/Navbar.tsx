@@ -10,9 +10,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useSelector } from "react-redux";
 
 const navs = [
-    {name: "Dashboard", href: "/user-dashboard"},
     {name: "Orders", href: "/orders"},
-    {name: "Cart Page", href: "/cart"},
     {name: "Check Out", href: "/checkout"},
 ]
 

@@ -1,0 +1,10 @@
+# Golang files (70% of the project)
+*.go        text eol=lf
+
+# TypeScript files (30% of the project)
+*.ts        text eol=lf
+*.tsx       text eol=lf
+
+# Ignore build artifacts
+/vendor     export-ignore
+/node_modules export-ignore
